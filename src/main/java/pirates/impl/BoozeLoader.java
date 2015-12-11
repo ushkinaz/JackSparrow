@@ -6,9 +6,6 @@ import pirates.impl.beans.BoozeSource;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,32 +18,36 @@ import static java.lang.Integer.parseInt;
  */
 public class BoozeLoader {
 
-    private CSVFormat csvFormat;
+    private final CSVFormat csvFormat;
 
     public BoozeLoader() {
-        csvFormat = CSVFormat.DEFAULT.withDelimiter(';');
+        csvFormat = CSVFormat.DEFAULT.withDelimiter(';').withHeader();
     }
 
     /**
-     * @param path
+     * @param reader booze is nigh
      * @return unmodifiable set of booze sources
-     * @throws IOException
+     * @throws BoozeParsingException something went wrong
      */
-    public Set<BoozeSource> loadFrom(String path) throws IOException {
+    public Set<BoozeSource> loadFrom(Reader reader) throws BoozeParsingException {
         Set<BoozeSource> sources = new HashSet<>();
 
-        Reader reader = Files.newBufferedReader(Paths.get(path), Charset.forName("UTF-8"));
-        Iterable<CSVRecord> records = csvFormat.parse(reader);
-        for (CSVRecord boozeRecord : records) {
-            BoozeSource boozeSource = new BoozeSource(
-                    boozeRecord.get("Source Name"),
-                    parseInt(boozeRecord.get("Size")),
-                    parseDouble(boozeRecord.get("Average price of gallon")),
-                    parseInt(boozeRecord.get("Min size")),
-                    parseInt(boozeRecord.get("Step size"))
-            );
-            sources.add(boozeSource);
+        try {
+            Iterable<CSVRecord> records = csvFormat.parse(reader);
+            for (CSVRecord boozeRecord : records) {
+                BoozeSource boozeSource = new BoozeSource(
+                        boozeRecord.get("Source Name"),
+                        parseInt(boozeRecord.get("Size")),
+                        parseDouble(boozeRecord.get("Average price of gallon")),
+                        parseInt(boozeRecord.get("Min size")),
+                        parseInt(boozeRecord.get("Step size"))
+                );
+                sources.add(boozeSource);
+            }
+        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
+            throw new BoozeParsingException(e);
         }
+
         return Collections.unmodifiableSet(sources);
     }
 }

@@ -1,29 +1,46 @@
 package pirates.impl.beans;
 
 /**
- * DTO, represents booze sourse, as given in CSV
+ * DTO, represents booze source, as given in CSV.
+ * Immutable
  */
 public class BoozeSource {
     private String name;
-    private int size;
-    private double avgPrice;
-    private int minBidSize;
-    private int stepSize;
 
-    public BoozeSource(String name, int size, double avgPrice, int minBidSize, int stepSize) {
+    /**
+     * Total number of gallons available for sale
+     */
+    private int totalAmount;
+
+    /**
+     * Average price per gallon
+     */
+    private double avgPrice;
+
+    /**
+     * Will not sell if bid size is less than this number of gallons
+     */
+    private int minBidSize;
+
+    /**
+     * Number of gallons in a lot increments by this size.
+     */
+    private int stepAmount;
+
+    public BoozeSource(String name, int totalAmount, double avgPrice, int minBidSize, int stepAmount) {
         this.name = name;
-        this.size = size;
+        this.totalAmount = totalAmount;
         this.avgPrice = avgPrice;
         this.minBidSize = minBidSize;
-        this.stepSize = stepSize;
+        this.stepAmount = stepAmount;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getSize() {
-        return size;
+    public int getTotalAmount() {
+        return totalAmount;
     }
 
     public double getAvgPrice() {
@@ -34,20 +51,23 @@ public class BoozeSource {
         return minBidSize;
     }
 
-    public int getStepSize() {
-        return stepSize;
+    public int getStepAmount() {
+        return stepAmount;
+    }
+
+    //  Creates new source, deducting given amount of gallons from available amount;
+    public BoozeSource deduct(int amount) {
+        //TODO: Implement pirates.impl.JackSparrowHelperImpl#helpJackSparrow
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("BoozeSource");
-        sb.append("{name='").append(name).append('\'');
-        sb.append(", size=").append(size);
-        sb.append(", avgPrice=").append(avgPrice);
-        sb.append(", minBidSize=").append(minBidSize);
-        sb.append(", stepSize=").append(stepSize);
-        sb.append('}');
-        return sb.toString();
+        return "BoozeSource{" + "name='" + name + '\'' +
+                ", totalAmount=" + totalAmount +
+                ", avgPrice=" + avgPrice +
+                ", minBidSize=" + minBidSize +
+                ", stepAmount=" + stepAmount +
+                '}';
     }
 }

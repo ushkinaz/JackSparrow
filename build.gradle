@@ -1,10 +1,14 @@
 apply plugin: 'java'
 
-repositories {
-    jcenter()
+compileJava {
+    sourceCompatibility = '8'
 }
 
 test.useTestNG()
+
+repositories {
+    jcenter()
+}
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.13'
