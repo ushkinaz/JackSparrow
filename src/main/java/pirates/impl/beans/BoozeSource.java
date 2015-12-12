@@ -1,5 +1,9 @@
 package pirates.impl.beans;
 
+import pirates.impl.BoozeBiddingException;
+import pirates.impl.BoozeExhaustedException;
+import pirates.impl.BoozeTradingException;
+
 /**
  * DTO, represents booze source, as given in CSV.
  * Immutable
@@ -20,18 +24,18 @@ public class BoozeSource {
     /**
      * Will not sell if bid size is less than this number of gallons
      */
-    private int minBidSize;
+    private int minConsignment;
 
     /**
      * Number of gallons in a lot increments by this size.
      */
     private int stepAmount;
 
-    public BoozeSource(String name, int totalAmount, double avgPrice, int minBidSize, int stepAmount) {
+    public BoozeSource(String name, int totalAmount, double avgPrice, int minConsignment, int stepAmount) {
         this.name = name;
         this.totalAmount = totalAmount;
         this.avgPrice = avgPrice;
-        this.minBidSize = minBidSize;
+        this.minConsignment = minConsignment;
         this.stepAmount = stepAmount;
     }
 
@@ -47,18 +51,36 @@ public class BoozeSource {
         return avgPrice;
     }
 
-    public int getMinBidSize() {
-        return minBidSize;
+    public int getMinConsignment() {
+        return minConsignment;
     }
 
     public int getStepAmount() {
         return stepAmount;
     }
 
-    //  Creates new source, deducting given amount of gallons from available amount;
-    public BoozeSource deduct(int amount) {
-        //TODO: Implement pirates.impl.JackSparrowHelperImpl#helpJackSparrow
-        throw new UnsupportedOperationException("Not implemented");
+    /**
+     * Creates new source, deducting given amount of gallons from available amount
+     * {@code this} instance remains untouched
+     *
+     * @param amount amount to deduct
+     * @return new instance
+     * @throws BoozeExhaustedException
+     */
+    public BoozeSource deduct(int amount) throws BoozeTradingException {
+        if (amount < minConsignment) {
+            throw new BoozeBiddingException("Consignment is too small, expected at least " + minConsignment + ". Got " + amount);
+        }
+
+        if ((amount - minConsignment) % stepAmount != 0) {
+            throw new BoozeBiddingException("Consignment size is not acceptable, expected to be " + minConsignment + " + X*" + stepAmount + ". Got " + amount);
+        }
+
+        if (totalAmount - amount < 0) {
+            throw new BoozeExhaustedException("You've asked for too much");
+        }
+
+        return new BoozeSource(name, totalAmount - amount, avgPrice, minConsignment, stepAmount);
     }
 
     @Override
@@ -66,7 +88,7 @@ public class BoozeSource {
         return "BoozeSource{" + "name='" + name + '\'' +
                 ", totalAmount=" + totalAmount +
                 ", avgPrice=" + avgPrice +
-                ", minBidSize=" + minBidSize +
+                ", minBidSize=" + minConsignment +
                 ", stepAmount=" + stepAmount +
                 '}';
     }
