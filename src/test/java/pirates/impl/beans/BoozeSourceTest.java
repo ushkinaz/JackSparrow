@@ -2,6 +2,7 @@ package pirates.impl.beans;
 
 import org.testng.annotations.Test;
 import pirates.impl.BoozeBiddingException;
+import pirates.impl.BoozeException;
 import pirates.impl.BoozeExhaustedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +18,7 @@ public class BoozeSourceTest {
     @Test
     public void deduct() throws Exception {
         // given
-        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", INITIAL, 0, 1, 1);
+        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", 500, INITIAL, 1, 1);
 
         // when
         BoozeSource lootedPlace = fathersHideout.deduct(NEED_FOR_PARTY);
@@ -32,9 +33,52 @@ public class BoozeSourceTest {
     }
 
     @Test
-    public void boozeExhausted() {
+    public void priceIsPositive() throws Exception {
+        // when
+        Throwable thrown = catchThrowable(() -> new BoozeSource("Bad seller", 0, INITIAL, 5, 5));
+
+        // then
+        assertThat(thrown)
+                .describedAs("Price should be positive")
+                .isInstanceOf(BoozeException.class);
+    }
+
+    @Test
+    public void shouldBeAbleToBuyAllGallons() throws Exception {
+        // when
+        Throwable thrown = catchThrowable(() -> new BoozeSource("Bad seller", 500, INITIAL, 999, 20));
+
+        // then
+        assertThat(thrown)
+                .describedAs("Should be able to buy all gallons.  1000 total, 999 minimal, 20 increment == not able")
+                .isInstanceOf(BoozeException.class);
+    }
+
+    @Test
+    public void minimalSizeEqualsTotal() throws Exception {
+        // when
+        BoozeSource source = new BoozeSource("Good seller", 500, INITIAL, INITIAL, 200);
+
+        // then
+        assertThat(source)
+                .isNotNull();
+    }
+
+    @Test
+    public void minimalShouldBeBigEnough() throws Exception {
+        // when
+        Throwable thrown = catchThrowable(() -> new BoozeSource("Bad seller", 500, INITIAL, 10, 20));
+
+        // then
+        assertThat(thrown)
+                .describedAs("Step amount should be less or equal to minimal consignment.")
+                .isInstanceOf(BoozeException.class);
+    }
+
+    @Test
+    public void boozeExhausted() throws BoozeException {
         // given
-        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", INITIAL, 0, 1, 1);
+        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", 500, INITIAL, 1, 1);
 
         // when
         Throwable thrown = catchThrowable(() -> fathersHideout.deduct(INITIAL * 2));
@@ -46,9 +90,9 @@ public class BoozeSourceTest {
     }
 
     @Test
-    public void boozeSoldInBulkOnly() {
+    public void boozeSoldInBulkOnly() throws BoozeException {
         // given
-        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", INITIAL, 0, MIN_CONSIGNMENT, STEP_AMOUNT);
+        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", 500, INITIAL, MIN_CONSIGNMENT, STEP_AMOUNT);
 
         // when
         Throwable thrown = catchThrowable(() -> fathersHideout.deduct(MIN_CONSIGNMENT - 1));
@@ -60,9 +104,9 @@ public class BoozeSourceTest {
     }
 
     @Test
-    public void biddingRulesAreEnforced() {
+    public void biddingRulesAreEnforced() throws BoozeException {
         // given
-        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", INITIAL, 0, MIN_CONSIGNMENT, STEP_AMOUNT);
+        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", 500, INITIAL, MIN_CONSIGNMENT, STEP_AMOUNT);
 
         // when
         assert STEP_AMOUNT != 1; //Otherwise the test will be false positive

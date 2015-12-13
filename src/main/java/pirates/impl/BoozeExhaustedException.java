@@ -11,4 +11,8 @@ public class BoozeExhaustedException extends BoozeTradingException {
     public BoozeExhaustedException(Throwable cause) {
         super(cause);
     }
+
+    public BoozeExhaustedException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -1,6 +1,7 @@
 package pirates.impl.beans;
 
 import pirates.impl.BoozeBiddingException;
+import pirates.impl.BoozeException;
 import pirates.impl.BoozeExhaustedException;
 import pirates.impl.BoozeTradingException;
 
@@ -31,7 +32,27 @@ public class BoozeSource {
      */
     private int stepAmount;
 
-    public BoozeSource(String name, int totalAmount, double avgPrice, int minConsignment, int stepAmount) {
+    public BoozeSource(String name, double avgPrice, int totalAmount, int minConsignment, int stepAmount) throws BoozeException {
+        if (totalAmount < 0) {
+            throw new BoozeException("Can not create empty source");
+        }
+
+        if (avgPrice <= 0) {
+            throw new BoozeException("Price should be positive");
+        }
+
+        if (minConsignment < stepAmount) {
+            throw new BoozeException("Step amount should be less or equal to minimal consignment");
+        }
+
+        if (minConsignment < stepAmount) {
+            throw new BoozeException("Step amount should be less or equal to minimal consignment");
+        }
+
+        if ((totalAmount - minConsignment) % stepAmount != 0) {
+            throw new BoozeException("Should be able to buy all gallons in one big package");
+        }
+
         this.name = name;
         this.totalAmount = totalAmount;
         this.avgPrice = avgPrice;
@@ -76,11 +97,11 @@ public class BoozeSource {
             throw new BoozeBiddingException("Consignment size is not acceptable, expected to be " + minConsignment + " + X*" + stepAmount + ". Got " + amount);
         }
 
-        if (totalAmount - amount < 0) {
+        try {
+            return new BoozeSource(name, avgPrice, totalAmount - amount, minConsignment, stepAmount);
+        } catch (BoozeException e) {
             throw new BoozeExhaustedException("You've asked for too much");
         }
-
-        return new BoozeSource(name, totalAmount - amount, avgPrice, minConsignment, stepAmount);
     }
 
     @Override

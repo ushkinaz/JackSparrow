@@ -37,14 +37,13 @@ public class BoozeLoader {
             for (CSVRecord boozeRecord : records) {
                 BoozeSource boozeSource = new BoozeSource(
                         boozeRecord.get("Source Name"),
-                        parseInt(boozeRecord.get("Size")),
-                        parseDouble(boozeRecord.get("Average price of gallon")),
+                        parseDouble(boozeRecord.get("Average price of gallon")), parseInt(boozeRecord.get("Size")),
                         parseInt(boozeRecord.get("Min size")),
                         parseInt(boozeRecord.get("Step size"))
                 );
                 sources.add(boozeSource);
             }
-        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
+        } catch (IllegalArgumentException | IllegalStateException | IOException | BoozeException e) {
             throw new BoozeParsingException(e);
         }
 
