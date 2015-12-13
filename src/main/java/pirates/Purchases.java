@@ -15,4 +15,22 @@ public class Purchases {
      * средняя цена галлона по всем источникам
      */
     Double averagePriceOfGallon;
+
+    public Purchases(Integer numberOfGallons, TreeSet<Purchase> purchases, Double averagePriceOfGallon) {
+        this.numberOfGallons = numberOfGallons;
+        this.purchases = purchases;
+        this.averagePriceOfGallon = averagePriceOfGallon;
+    }
+
+    public Integer getNumberOfGallons() {
+        return numberOfGallons;
+    }
+
+    public TreeSet<Purchase> getPurchases() {
+        return purchases;
+    }
+
+    public Double getAveragePriceOfGallon() {
+        return averagePriceOfGallon;
+    }
 }
