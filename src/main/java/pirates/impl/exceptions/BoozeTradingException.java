@@ -1,4 +1,4 @@
-package pirates.impl;
+package pirates.impl.exceptions;
 
 /**
  * Booze has come to end

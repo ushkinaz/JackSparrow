@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import pirates.JackSparrowHelper;
 import pirates.Purchases;
 import pirates.impl.beans.BoozeSource;
+import pirates.impl.exceptions.BoozeParsingException;
 
 import java.io.IOException;
 import java.io.Reader;

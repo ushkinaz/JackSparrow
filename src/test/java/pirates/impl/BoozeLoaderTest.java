@@ -3,6 +3,7 @@ package pirates.impl;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pirates.impl.beans.BoozeSource;
+import pirates.impl.exceptions.BoozeParsingException;
 
 import java.io.StringReader;
 import java.util.Set;

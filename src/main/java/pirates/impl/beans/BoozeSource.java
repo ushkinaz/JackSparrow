@@ -1,9 +1,9 @@
 package pirates.impl.beans;
 
-import pirates.impl.BoozeBiddingException;
-import pirates.impl.BoozeException;
-import pirates.impl.BoozeExhaustedException;
-import pirates.impl.BoozeTradingException;
+import pirates.impl.exceptions.BoozeBiddingException;
+import pirates.impl.exceptions.BoozeException;
+import pirates.impl.exceptions.BoozeExhaustedException;
+import pirates.impl.exceptions.BoozeTradingException;
 
 /**
  * DTO, represents booze source, as given in CSV.

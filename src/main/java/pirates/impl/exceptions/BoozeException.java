@@ -1,4 +1,4 @@
-package pirates.impl;
+package pirates.impl.exceptions;
 
 /**
  * Generic issues

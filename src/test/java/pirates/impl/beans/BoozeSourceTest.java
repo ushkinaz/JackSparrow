@@ -1,9 +1,9 @@
 package pirates.impl.beans;
 
 import org.testng.annotations.Test;
-import pirates.impl.BoozeBiddingException;
-import pirates.impl.BoozeException;
-import pirates.impl.BoozeExhaustedException;
+import pirates.impl.exceptions.BoozeBiddingException;
+import pirates.impl.exceptions.BoozeException;
+import pirates.impl.exceptions.BoozeExhaustedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
