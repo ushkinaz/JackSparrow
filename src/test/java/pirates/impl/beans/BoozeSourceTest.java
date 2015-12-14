@@ -76,6 +76,17 @@ public class BoozeSourceTest {
     }
 
     @Test
+    public void totalShouldBeBiggerThanMinimal() throws Exception {
+        // when
+        Throwable thrown = catchThrowable(() -> new BoozeSource("Bad seller", 500, 10, 100, 1));
+
+        // then
+        assertThat(thrown)
+                .describedAs("Total should be greater than minimal.")
+                .isInstanceOf(BoozeException.class);
+    }
+
+    @Test
     public void boozeExhausted() throws BoozeException {
         // given
         BoozeSource fathersHideout = new BoozeSource("Fathers hideout", 500, INITIAL, 1, 1);
