@@ -118,4 +118,56 @@ public class BoozeSourceTest {
                 .describedAs("Allowed consignment size is defined as min_consignment + n*step_amount")
                 .isInstanceOf(BoozeBiddingException.class);
     }
+
+    @Test
+    public void toBuy() throws BoozeException {
+        // given
+        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", 500, 100, 5, 5);
+
+        // when
+        int toBuy = fathersHideout.findMaxAmountToBuy(7);
+
+        // then
+        assertThat(toBuy)
+                .isEqualTo(10);
+    }
+
+    @Test
+    public void buyMinimum() throws BoozeException {
+        // given
+        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", 500, 100, 20, 10);
+
+        // when
+        int toBuy = fathersHideout.findMaxAmountToBuy(2);
+
+        // then
+        assertThat(toBuy)
+                .isEqualTo(20);
+    }
+
+    @Test
+    public void buyAll() throws BoozeException {
+        // given
+        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", 500, 100, 20, 10);
+
+        // when
+        int toBuy = fathersHideout.findMaxAmountToBuy(300);
+
+        // then
+        assertThat(toBuy)
+                .isEqualTo(100);
+    }
+
+    @Test
+    public void buyExactMinimum() throws BoozeException {
+        // given
+        BoozeSource fathersHideout = new BoozeSource("Fathers hideout", 500, 10, 5, 1);
+
+        // when
+        int toBuy = fathersHideout.findMaxAmountToBuy(5);
+
+        // then
+        assertThat(toBuy)
+                .isEqualTo(5);
+    }
 }

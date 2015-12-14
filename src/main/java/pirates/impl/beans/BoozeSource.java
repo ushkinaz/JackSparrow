@@ -104,6 +104,25 @@ public class BoozeSource {
         }
     }
 
+    /**
+     * @param gallonsToBuy buying request
+     * @return maximum allowable amount of gallons we can buy from this source. 0, if buying is not allowed
+     */
+    public int findMaxAmountToBuy(int gallonsToBuy) {
+        if (gallonsToBuy < minConsignment) {
+            return minConsignment;
+        }
+
+        if (totalAmount < gallonsToBuy) {
+            return totalAmount;
+        }
+        //else - we can buy all gallons from this source
+
+        int incrementsToBuy = (int) (Math.ceil((double) (gallonsToBuy - minConsignment) / stepAmount) * stepAmount);
+
+        return minConsignment + incrementsToBuy;
+    }
+
     @Override
     public String toString() {
         return "BoozeSource{" + "name='" + name + '\'' +
