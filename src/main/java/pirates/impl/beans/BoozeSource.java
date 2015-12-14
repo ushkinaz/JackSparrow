@@ -41,13 +41,13 @@ public class BoozeSource {
             throw new BoozeException("Price should be positive");
         }
 
+        if (stepAmount <= 0) {
+            throw new BoozeException("Step amount should be positive");
+        }
+
         if (totalAmount < minConsignment) {
             throw new BoozeException("Total should be greater than minimal");
         }
-        if (minConsignment < stepAmount) {
-            throw new BoozeException("Step amount should be less or equal to minimal consignment");
-        }
-
         if (minConsignment < stepAmount) {
             throw new BoozeException("Step amount should be less or equal to minimal consignment");
         }

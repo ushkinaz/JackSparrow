@@ -1,23 +1,12 @@
 package pirates.impl;
 
-import pirates.Purchases;
 import pirates.impl.beans.BoozeSource;
+import pirates.impl.beans.PartialPurchase;
+import pirates.impl.exceptions.BoozeExhaustedException;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface BuyingStrategy {
-    Purchases findBids(int gallons, Set<BoozeSource> sources);
+    Collection<PartialPurchase> findBids(Set<BoozeSource> sources, int gallons) throws BoozeExhaustedException;
 }
-
-/*
-* Bad case to consider
-* need 100
-* 50*1 @ 1
-* have  1*51 @ 2
-* have 50*1 @ 300
-*
-* winning strategy is
-* 49*1 @ 1
-* 1*51 @ 2
-*
-* */
